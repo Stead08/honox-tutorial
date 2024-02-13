@@ -1,10 +1,9 @@
 import { FC } from "hono/jsx";
-import { Article, getArticleById} from "../../lib/db";
+import { Article, getArticleById } from "../../lib/db";
 import { css } from "hono/css";
-import create from "./create";
+import { html, raw } from "hono/html";
 import { createRoute } from "honox/factory";
 import { parseMarkdown } from "../../lib/markdown";
-
 
 const cardClass = css`
     border: 1px solid #ddd;
@@ -37,31 +36,33 @@ const contentClass = css`
 `;
 
 interface Props {
-  article: Article;
-  content: string;
+	article: Article;
+	content: string;
 }
 
 const Page: FC<Props> = ({ article, content }) => {
-  return (
-      <article class={cardClass}>
-        <header>
-          <h1 class={titleClass}>{article.title}</h1>
-        </header>
-        <div class={contentClass} id="contents" dangerouslySetInnerHTML={{__html: content}}>
-
-        </div>
-      </article>
-  )
-}
+	return (
+		<article class={cardClass}>
+			<header>
+				<h1 class={titleClass}>{article.title}</h1>
+			</header>
+			<div class={contentClass} id="contents">
+				{html`${raw(content)}`}
+			</div>
+		</article>
+	);
+};
 
 export default createRoute(async (c) => {
-  const { id } = c.req.param();
-  const article = await getArticleById(id);
-  if (!article) {
-    return c.notFound();
-  }
+	const { id } = c.req.param();
+	const article = await getArticleById(id);
+	if (!article) {
+		return c.notFound();
+	}
 
-  const content = parseMarkdown(article.content);
+	const content = parseMarkdown(article.content);
 
-  return c.render(<Page article={article} content={content} />, { title: article.title})
-})
+	return c.render(<Page article={article} content={content} />, {
+		title: article.title,
+	});
+});

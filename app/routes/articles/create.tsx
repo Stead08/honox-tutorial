@@ -3,23 +3,22 @@ import { createRoute } from "honox/factory";
 import type { FC } from "hono/jsx";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
-import {createArticle} from "../../lib/db";
+import { createArticle } from "../../lib/db";
 
 // keyはstring { value: T, error: T[] | undefined }
 type Form<T> = {
-  value: T;
-  error: string[] | undefined;
-}
+	value: T;
+	error: string[] | undefined;
+};
 
-interface Data{
-  title: Form<string>;
-  content: Form<string>;
+interface Data {
+	title: Form<string>;
+	content: Form<string>;
 }
 
 interface Props {
-  data?: Data;
+	data?: Data;
 }
-
 
 const titleClass = css`
     font-size: 1.5rem;
@@ -70,63 +69,74 @@ const errorClass = css`
 `;
 
 const Page: FC<Props> = ({ data }) => {
-  return (
-      <div>
-        <h1 class={titleClass}>Create an article</h1>
-        <form class={formClass} method="post">
-          <label class={labelClass}>
-            Title
-            <input name="title" class={inputClass} type="text" value={data?.title.value}/>
-          </label>
-          {data?.title.error?.map((error) => <p class={errorClass}>{error}</p>)}
-          <label class={labelClass}>
-            Content
-            <textarea name="content" class={textareaClass} value={data?.content.value}/>
-          </label>
-          {data?.content.error?.map((error) => <p class={errorClass}>{error}</p>)}
-          <button class={buttonClass} type="submit">
-            Create
-          </button>
-        </form>
-      </div>
-  )
-}
+	return (
+		<div>
+			<h1 class={titleClass}>Create an article</h1>
+			<form class={formClass} method="post">
+				<label class={labelClass}>
+					Title
+					<input
+						name="title"
+						class={inputClass}
+						type="text"
+						value={data?.title.value}
+					/>
+				</label>
+				{data?.title.error?.map((error) => (
+					<p class={errorClass}>{error}</p>
+				))}
+				<label class={labelClass}>
+					Content
+					<textarea
+						name="content"
+						class={textareaClass}
+						value={data?.content.value}
+					/>
+				</label>
+				{data?.content.error?.map((error) => (
+					<p class={errorClass}>{error}</p>
+				))}
+				<button class={buttonClass} type="submit">
+					Create
+				</button>
+			</form>
+		</div>
+	);
+};
 
 export default createRoute((c) => {
-  return c.render(<Page />, {
-    title: "Create an article",
-  });
+	return c.render(<Page />, {
+		title: "Create an article",
+	});
 });
 
 const Article = z.object({
-  title: z.string().min(1).max(255),
-  content: z.string().min(1),
+	title: z.string().min(1).max(255),
+	content: z.string().min(1),
 });
 
 export const POST = createRoute(
-    zValidator("form", Article, async (result, c) => {
-      if (result.success) {
-        const { title, content } = result.data;
-        await createArticle({title, content})
-        return c.redirect("/articles");
-      }
+	zValidator("form", Article, async (result, c) => {
+		if (result.success) {
+			const { title, content } = result.data;
+			await createArticle({ title, content });
+			return c.redirect("/articles");
+		}
 
-      const { title, content } = result.data;
-      const data: Data = {
-        title: {
-          value: title,
-          error: result.error.flatten().fieldErrors.title,
-        },
-        content: {
-          value: content,
-          error: result.error.flatten().fieldErrors.content,
-        }
-      }
+		const { title, content } = result.data;
+		const data: Data = {
+			title: {
+				value: title,
+				error: result.error.flatten().fieldErrors.title,
+			},
+			content: {
+				value: content,
+				error: result.error.flatten().fieldErrors.content,
+			},
+		};
 
-      return c.render(<Page data={data}/>, {
-        title: "Create an article",
-      });
-    })
+		return c.render(<Page data={data} />, {
+			title: "Create an article",
+		});
+	}),
 );
-
-

@@ -5,7 +5,7 @@ import { css } from "hono/css";
 import DeleteButton from "../../islands/deleteButton";
 
 interface Props {
-  articles: Article[];
+	articles: Article[];
 }
 
 const titleClass = css`
@@ -31,22 +31,22 @@ const card = css`
 `;
 
 const Page: FC<Props> = ({ articles }) => {
-  return (
-      <div>
-        <h1 class={titleClass}>Articles</h1>
-        <ul class={cards}>
-          {articles.map((article) => (
-              <li class={card}>
-                <a href={`/articles/${article.id}`}>{article.title}</a>
-                <DeleteButton articleId={article.id} />
-              </li>
-          ))}
-        </ul>
-      </div>
-  )
-}
+	return (
+		<div>
+			<h1 class={titleClass}>Articles</h1>
+			<ul class={cards}>
+				{articles.map((article) => (
+					<li class={card}>
+						<a href={`/articles/${article.id}`}>{article.title}</a>
+						<DeleteButton articleId={article.id} />
+					</li>
+				))}
+			</ul>
+		</div>
+	);
+};
 
 export default createRoute(async (c) => {
-  const articles = await getArticles();
-  return c.render(<Page articles={ articles } />, {title: "Articles"})
-})
+	const articles = await getArticles();
+	return c.render(<Page articles={articles} />, { title: "Articles" });
+});

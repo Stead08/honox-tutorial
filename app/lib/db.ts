@@ -1,59 +1,58 @@
 import fs from "fs/promises";
 
 export interface Article {
-  id: string;
-  title: string;
-  content: string;
-  created_at: string;
-  updated_at: string;
+	id: string;
+	title: string;
+	content: string;
+	created_at: string;
+	updated_at: string;
 }
 
 export const createArticle = async ({
-  title,
-  content,
+	title,
+	content,
 }: Pick<Article, "title" | "content">) => {
-  const articleJSON = await fs.readFile("./data/articles.json", {
-    encoding: "utf-8",
-  });
-  const articles: Article[] = JSON.parse(articleJSON);
-  const id = crypto.randomUUID();
-  const created_at = new Date().toISOString();
-  const updated_at = created_at;
-  const article: Article = {
-    id,
-    title,
-    content,
-    created_at,
-    updated_at
-  };
-  articles.push(article);
-  await fs.writeFile("./data/articles.json", JSON.stringify(articles));
+	const articleJSON = await fs.readFile("./data/articles.json", {
+		encoding: "utf-8",
+	});
+	const articles: Article[] = JSON.parse(articleJSON);
+	const id = crypto.randomUUID();
+	const created_at = new Date().toISOString();
+	const updated_at = created_at;
+	const article: Article = {
+		id,
+		title,
+		content,
+		created_at,
+		updated_at,
+	};
+	articles.push(article);
+	await fs.writeFile("./data/articles.json", JSON.stringify(articles));
 
-  return article;
-}
+	return article;
+};
 
 export const getArticles = async () => {
-  const articlesJSON = await fs.readFile("./data/articles.json", {
-    encoding: "utf-8"
-  });
-  return JSON.parse(articlesJSON);
+	const articlesJSON = await fs.readFile("./data/articles.json", {
+		encoding: "utf-8",
+	});
+	return JSON.parse(articlesJSON);
 };
 
 export const getArticleById = async (id: string) => {
-  const articlesJSON = await fs.readFile("./data/articles.json", {
-    encoding: "utf-8"
-  });
-  const articles = JSON.parse(articlesJSON) as Article[];
-  return articles.find((article) => article.id === id);
-}
+	const articlesJSON = await fs.readFile("./data/articles.json", {
+		encoding: "utf-8",
+	});
+	const articles = JSON.parse(articlesJSON) as Article[];
+	return articles.find((article) => article.id === id);
+};
 
 export const deleteArticle = async (id: string) => {
-  const articlesJSON = await fs.readFile("./data/articles.json", {
-    encoding: "utf-8"
-  });
+	const articlesJSON = await fs.readFile("./data/articles.json", {
+		encoding: "utf-8",
+	});
 
-  const articles: Article[] = JSON.parse(articlesJSON);
-  const newArticles = articles.filter((article) => article.id !== id);
-  await fs.writeFile("./data/articles.json", JSON.stringify(newArticles));
-}
-
+	const articles: Article[] = JSON.parse(articlesJSON);
+	const newArticles = articles.filter((article) => article.id !== id);
+	await fs.writeFile("./data/articles.json", JSON.stringify(newArticles));
+};

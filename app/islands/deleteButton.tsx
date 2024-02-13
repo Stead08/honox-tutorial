@@ -40,31 +40,40 @@ const buttonClass = css`
   cursor: pointer;
 `;
 
-export default function DeleteButton({ articleId } : { articleId: string}){
-  const dialogRef = useRef<HTMLDialogElement | null>(null);
+export default function DeleteButton({ articleId }: { articleId: string }) {
+	const dialogRef = useRef<HTMLDialogElement | null>(null);
 
-  const handleClickDelete = () => {
-    dialogRef.current?.showModal();
-  };
+	const handleClickDelete = () => {
+		dialogRef.current?.showModal();
+	};
 
-  return (
-      <div>
-        <dialog class={dialogClass} ref={dialogRef}>
-          <form method="POST" action={`/articles/${articleId}/delete`}>
-            <p>Are you sure you want to delete this article?</p>
-            <div class={dialogButtons}>
-              <button value="cancel" type="submit" formmethod="dialog" class={cancelButton}>
-                Cancel
-              </button>
-              <button type="submit" class={buttonClass}>
-                OK
-              </button>
-            </div>
-          </form>
-        </dialog>
-        <button type="button" class={buttonClass} onClick={() => handleClickDelete()}>
-          Delete
-        </button>
-      </div>
-  )
+	return (
+		<div>
+			<dialog class={dialogClass} ref={dialogRef}>
+				<form method="POST" action={`/articles/${articleId}/delete`}>
+					<p>Are you sure you want to delete this article?</p>
+					<div class={dialogButtons}>
+						<button
+							value="cancel"
+							type="submit"
+							formmethod="dialog"
+							class={cancelButton}
+						>
+							Cancel
+						</button>
+						<button type="submit" class={buttonClass}>
+							OK
+						</button>
+					</div>
+				</form>
+			</dialog>
+			<button
+				type="button"
+				class={buttonClass}
+				onClick={() => handleClickDelete()}
+			>
+				Delete
+			</button>
+		</div>
+	);
 }

@@ -44,31 +44,34 @@ const containerClass = css`
 `;
 
 const links = [
-  { href: "/articles", text: "Articles"},
-  { href: "/articles/create", text: "Create"}
+	{ href: "/articles", text: "Articles" },
+	{ href: "/articles/create", text: "Create" },
 ];
 
 export const Layout: FC = ({ children }) => {
-  const c = useRequestContext();
-  const current = c.req.path;
-  return (
-      <div class={ className}>
-        <header class={headerClass}>
-          <h1 class={titleClass}>
-            <a href="/" class={linkClass}>
-              HonoX Blog 🔥
-            </a>
-          </h1>
-          <nav class={navClass}>
-            {links.map((link) => (
-                // cs は clsx のように複数クラスを結合する関数
-                <a href={link.href} class={cx(linkClass, current === link.href && activeLinkClass)} >
-                  { link.text }
-                </a>
-            ))}
-          </nav>
-        </header>
-        <main class={containerClass}>{children}</main>
-      </div>
-  );
+	const c = useRequestContext();
+	const current = c.req.path;
+	return (
+		<div class={className}>
+			<header class={headerClass}>
+				<h1 class={titleClass}>
+					<a href="/" class={linkClass}>
+						HonoX Blog 🔥
+					</a>
+				</h1>
+				<nav class={navClass}>
+					{links.map((link) => (
+						// cs は clsx のように複数クラスを結合する関数
+						<a
+							href={link.href}
+							class={cx(linkClass, current === link.href && activeLinkClass)}
+						>
+							{link.text}
+						</a>
+					))}
+				</nav>
+			</header>
+			<main class={containerClass}>{children}</main>
+		</div>
+	);
 };
