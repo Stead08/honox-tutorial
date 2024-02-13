@@ -5,14 +5,19 @@
     "dev": "vite",
     "build": "vite build --mode client && vite build",
     "preview": "wrangler pages dev ./dist",
-    "deploy": "$npm_execpath run build && wrangler pages deploy ./dist"
+    "deploy": "$npm_execpath run build && wrangler pages deploy ./dist",
+    "lint": "biome lint app"
   },
   "private": true,
   "dependencies": {
+    "@hono/zod-validator": "^0.1.11",
+    "@markdoc/markdoc": "^0.4.0",
     "hono": "^4.0.1",
-    "honox": "^0.1.0"
+    "honox": "^0.1.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.5.3",
     "@hono/vite-cloudflare-pages": "^0.2.4",
     "vite": "^5.0.12",
     "wrangler": "^3.27.0"
