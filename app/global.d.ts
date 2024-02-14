@@ -6,8 +6,8 @@ type Head = {
 
 declare module "hono" {
 	interface Env {
-		Variables: {};
-		Bindings: {};
+		Variables: Record<string, unknown>;
+		Bindings: Record<string, unknown>;
 	}
 	interface ContextRenderer {
 		(
