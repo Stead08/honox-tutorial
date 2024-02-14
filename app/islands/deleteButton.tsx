@@ -1,5 +1,5 @@
 import { css } from "hono/css";
-import { FC, useRef } from "hono/jsx";
+import { useRef } from "hono/jsx";
 
 const dialogClass = css`
     position: fixed;
